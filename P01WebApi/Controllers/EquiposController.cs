@@ -36,9 +36,9 @@ namespace P01WebApi.Controllers
         [Route("getbyid/{id}")]
         public IActionResult get(int id)
         {
-
+            //cuando pongo para comparar el estado me da error la petición, no se porque 
             equipos? unEquipo = (from e in _equiposContext.equipos
-                          where e.id_equipos == id
+                          where e.id_equipos == id //&& e.estado =="A"
                           select e).FirstOrDefault();
 
             if(unEquipo == null)
@@ -53,8 +53,9 @@ namespace P01WebApi.Controllers
         public IActionResult buscar(string filtro)
         {
             List<equipos> equiposList = (from e in _equiposContext.equipos
-                                         where e.nombre.Contains(filtro)
-                                         || e.descripcion.Contains(filtro)
+                                         where (e.nombre.Contains(filtro)
+                                         || e.descripcion.Contains(filtro))
+                                        // && e.estado == "A"
                                          select e).ToList();
 
             //if(equiposList.Count() == 0) { return NotFound(); }
@@ -73,6 +74,7 @@ namespace P01WebApi.Controllers
         {
             try
             {
+               // equipoNuevo.estado = "A";
                 _equiposContext.equipos.Add(equipoNuevo);
                 _equiposContext.SaveChanges();
 

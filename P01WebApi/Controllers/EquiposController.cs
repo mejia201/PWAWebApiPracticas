@@ -7,6 +7,7 @@ namespace P01WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class EquiposController : ControllerBase
     {
         private readonly equiposContext _equiposContext;
@@ -22,6 +23,11 @@ namespace P01WebApi.Controllers
         {
             List <equipos> listadoEquipo = (from e in _equiposContext.equipos
                                             select e).ToList();
+
+            //.Take(1) funciona como Top en base de datos
+            //.Skip(3) saltar 3 
+            //OrderBy(r => e.marca_id). ThenBy(r=> r.tipo_equipo)
+
 
             if(listadoEquipo.Count == 0) { return NotFound(); }
 
@@ -129,7 +135,6 @@ namespace P01WebApi.Controllers
             return Ok();
         }
 
-        
     }
 
     

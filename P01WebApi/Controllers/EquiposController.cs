@@ -21,8 +21,30 @@ namespace P01WebApi.Controllers
         [Route("getall")]
         public IActionResult ObtenerEquipos()
         {
-            List <equipos> listadoEquipo = (from e in _equiposContext.equipos
-                                            select e).ToList();
+            var listadoEquipo = (from e in _equiposContext.equipos
+                                            
+                                            join t in _equiposContext.tipo_equipo
+                                            on e.tipo_equipo_id equals t.id_tipo_equipo
+
+                                            join m in _equiposContext.marcas
+                                            on e.marca_id equals m.id_marcas
+
+                                            join es in _equiposContext.estados_equipo
+                                            on e.estado_equipo_id equals es.id_estados_equipo
+
+                                            select new
+                                            {
+                                                e.id_equipos,
+                                                e.nombre,
+                                                e.descripcion,
+                                                e.tipo_equipo_id,
+                                                tipo_equipo = t.descripcion,
+                                                e.marca_id,
+                                                marca = m.nombre_marca,
+                                                e.estado_equipo_id,
+                                                estados_equipo = es.descripcion,
+                                                e.estado
+                                            }).ToList();
 
             //.Take(1) funciona como Top en base de datos
             //.Skip(3) saltar 3 
